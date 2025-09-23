@@ -1,6 +1,5 @@
 import { NextRequest } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import pdfParse from 'pdf-parse'
 
 export async function POST(req: NextRequest) {
   try {
@@ -53,7 +52,6 @@ export async function POST(req: NextRequest) {
     let fileUrl = null
     let fileName = null
     let fileSize = null
-    let extractedText = null
 
     if (file) {
       fileName = file.name
@@ -75,23 +73,6 @@ export async function POST(req: NextRequest) {
         .getPublicUrl(uniqueFileName)
       
       fileUrl = publicUrl
-
-      // Extract text from PDF
-      if (file.type === 'application/pdf' || fileName.toLowerCase().endsWith('.pdf')) {
-        try {
-          const arrayBuffer = await file.arrayBuffer()
-          const buffer = Buffer.from(arrayBuffer)
-          const pdfData = await pdfParse(buffer)
-          extractedText = pdfData.text
-          console.log('PDF text extracted successfully:', extractedText.length, 'characters');
-          if (!extractedText || extractedText.trim().length === 0) {
-            extractedText = `Medical document: ${fileName}. No text could be extracted.`
-          }
-        } catch (error) {
-          console.error('PDF parsing error:', error)
-          extractedText = `Medical document: ${fileName}. PDF parsing failed - manual review required.`
-        }
-      }
     }
 
     const { data: record, error: recordError } = await supabase
@@ -106,7 +87,6 @@ export async function POST(req: NextRequest) {
         file_name: fileName,
         file_size: fileSize,
         clinical_notes: notes || null,
-        extracted_text: extractedText,
         test_date: new Date().toISOString().split('T')[0],
         importance_level: parseInt(importance, 10) || 3
       })
