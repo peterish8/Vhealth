@@ -1,0 +1,2 @@
+ALTER TABLE doctors
+ADD COLUMN password_enabled BOOLEAN DEFAULT FALSE;

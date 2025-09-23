@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF Extraction Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 600px; }
+        .result { margin-top: 20px; padding: 15px; border: 1px solid #ccc; background: #f9f9f9; }
+        .error { background: #ffe6e6; border-color: #ff9999; }
+        .success { background: #e6ffe6; border-color: #99ff99; }
+        button { padding: 10px 20px; margin: 10px 0; }
+        input[type="file"] { margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PDF Text Extraction Test</h1>
+        
+        <form id="testForm">
+            <div>
+                <label for="pdfFile">Select PDF file:</label><br>
+                <input type="file" id="pdfFile" accept=".pdf" required>
+            </div>
+            <button type="submit">Test PDF Extraction</button>
+        </form>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('testForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const fileInput = document.getElementById('pdfFile');
+            const resultDiv = document.getElementById('result');
+            
+            if (!fileInput.files[0]) {
+                resultDiv.innerHTML = '<div class="result error">Please select a PDF file</div>';
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            
+            resultDiv.innerHTML = '<div class="result">Processing PDF...</div>';
+            
+            try {
+                const response = await fetch('/api/extract-pdf-text', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            <h3>Extraction Successful!</h3>
+                            <p><strong>Method:</strong> ${result.method || 'pdf-parse'}</p>
+                            <p><strong>Text Length:</strong> ${result.extractedText.length} characters</p>
+                            <h4>Extracted Text:</h4>
+                            <pre style="white-space: pre-wrap; max-height: 300px; overflow-y: auto;">${result.extractedText}</pre>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            <h3>Extraction Failed</h3>
+                            <p><strong>Error:</strong> ${result.error || 'Unknown error'}</p>
+                            <p><strong>Details:</strong> ${result.details || 'No details'}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>Request Failed</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
