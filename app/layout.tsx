@@ -10,6 +10,14 @@ export const metadata: Metadata = {
   title: "V Health - Health Vault of India",
   description: "Secure digital health records for every Indian citizen",
   generator: "v0.app",
+  icons: {
+    icon: [
+      {
+        url: "/Vhealth_logo.jpg",
+        type: "image/jpeg",
+      }
+    ]
+  }
 }
 
 export default function RootLayout({
