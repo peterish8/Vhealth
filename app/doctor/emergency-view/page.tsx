@@ -117,8 +117,9 @@ export default function DoctorEmergencyView() {
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Age:</span>
                     <span className="font-medium">
-                      {patientData.age?.toString().replace(/ years$/, "") ||
-                        "Unknown"}
+                      {patientData.age
+                        ? patientData.age.toString().replace(/ years$/, "")
+                        : "Unknown"}
                     </span>
                   </div>
                   <div className="flex justify-between">
