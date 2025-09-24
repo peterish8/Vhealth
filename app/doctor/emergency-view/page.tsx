@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
   AlertTriangle,
   Heart,
@@ -15,27 +15,26 @@ import {
   Pill,
   Zap,
   ArrowLeft,
-
-} from "lucide-react"
-import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+} from "lucide-react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function DoctorEmergencyView() {
-  const [patientData, setPatientData] = useState<any>(null)
-  const searchParams = useSearchParams()
+  const [patientData, setPatientData] = useState<any>(null);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    const storedData = sessionStorage.getItem('emergencyData')
+    const storedData = sessionStorage.getItem("emergencyData");
     if (storedData) {
       try {
-        const parsedData = JSON.parse(storedData)
-        setPatientData(parsedData.patientData)
-        sessionStorage.removeItem('emergencyData')
+        const parsedData = JSON.parse(storedData);
+        setPatientData(parsedData.patientData);
+        sessionStorage.removeItem("emergencyData");
       } catch (error) {
-        console.error('Error parsing stored emergency data:', error)
+        console.error("Error parsing stored emergency data:", error);
       }
     }
-  }, [])
+  }, []);
 
   if (!patientData) {
     return (
@@ -48,16 +47,19 @@ export default function DoctorEmergencyView() {
                   <Zap className="h-8 w-8 text-emergency animate-pulse" />
                 </div>
               </div>
-              <h2 className="text-xl font-bold text-emergency">Loading Emergency Data</h2>
+              <h2 className="text-xl font-bold text-emergency">
+                Loading Emergency Data
+              </h2>
               <p className="text-sm text-muted-foreground">Please wait...</p>
             </div>
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
-  const highImportanceRecords = patientData.health_records?.filter((r: any) => r.priority_level >= 3) || []
+  const highImportanceRecords =
+    patientData.health_records?.filter((r: any) => r.priority_level >= 3) || [];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emergency/5 via-background to-emergency/10">
@@ -74,8 +76,12 @@ export default function DoctorEmergencyView() {
               <div className="flex items-center gap-2">
                 <AlertTriangle className="h-6 w-6 text-emergency" />
                 <div className="text-center">
-                  <h1 className="text-xl font-bold text-emergency">EMERGENCY ACCESS</h1>
-                  <p className="text-sm text-muted-foreground">High-Importance Medical Records</p>
+                  <h1 className="text-xl font-bold text-emergency">
+                    EMERGENCY ACCESS
+                  </h1>
+                  <p className="text-sm text-muted-foreground">
+                    High-Importance Medical Records
+                  </p>
                 </div>
               </div>
             </div>
@@ -98,15 +104,22 @@ export default function DoctorEmergencyView() {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Name:</span>
-                    <span className="font-bold text-lg">{patientData.name}</span>
+                    <span className="font-bold text-lg">
+                      {patientData.name}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">VHealth ID:</span>
-                    <span className="font-mono text-sm bg-primary/10 px-2 py-1 rounded">{patientData.vh_id}</span>
+                    <span className="font-mono text-sm bg-primary/10 px-2 py-1 rounded">
+                      {patientData.vh_id}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Age:</span>
-                    <span className="font-medium">{patientData.age?.toString().replace(/ years$/, '') || 'Unknown'}</span>
+                    <span className="font-medium">
+                      {patientData.age?.toString().replace(/ years$/, "") ||
+                        "Unknown"}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Gender:</span>
@@ -136,19 +149,40 @@ export default function DoctorEmergencyView() {
                 {highImportanceRecords.length > 0 ? (
                   <div className="space-y-4">
                     {highImportanceRecords.map((record: any) => (
-                      <div key={record.id} className="p-4 border rounded-lg bg-card">
+                      <div
+                        key={record.id}
+                        className="p-4 border rounded-lg bg-card"
+                      >
                         <div className="flex justify-between items-start">
                           <div>
                             <h3 className="font-semibold">{record.title}</h3>
-                            <p className="text-sm text-muted-foreground">{record.report_type}</p>
+                            <p className="text-sm text-muted-foreground">
+                              {record.report_type}
+                            </p>
                           </div>
-                          <Badge variant={record.priority_level === 5 ? "destructive" : record.priority_level === 4 ? "warning" : "default"}>
+                          <Badge
+                            variant={
+                              record.priority_level === 5
+                                ? "destructive"
+                                : record.priority_level === 4
+                                ? "warning"
+                                : "default"
+                            }
+                          >
                             Priority Level {record.priority_level}
                           </Badge>
                         </div>
                         {record.file_url && (
-                          <Button asChild variant="link" className="p-0 h-auto mt-2">
-                            <a href={record.file_url} target="_blank" rel="noopener noreferrer">
+                          <Button
+                            asChild
+                            variant="link"
+                            className="p-0 h-auto mt-2"
+                          >
+                            <a
+                              href={record.file_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
                               View Document
                             </a>
                           </Button>
@@ -158,7 +192,8 @@ export default function DoctorEmergencyView() {
                   </div>
                 ) : (
                   <p className="text-muted-foreground text-center py-4">
-                    No high-importance (level 3-5) records found for this patient.
+                    No high-importance (level 3-5) records found for this
+                    patient.
                   </p>
                 )}
               </CardContent>
@@ -167,5 +202,5 @@ export default function DoctorEmergencyView() {
         </div>
       </main>
     </div>
-  )
+  );
 }

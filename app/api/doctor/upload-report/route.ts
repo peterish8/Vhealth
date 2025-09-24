@@ -112,7 +112,7 @@ export async function POST(req: NextRequest) {
         file_size: fileSize,
         clinical_notes: notes || null,
         test_date: new Date().toISOString().split("T")[0],
-        importance_level: parseInt(importance, 10) || 3,
+        priority_level: parseInt(importance, 10) || 3,
       })
       .select()
       .single();
