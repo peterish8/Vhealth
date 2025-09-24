@@ -57,7 +57,7 @@ export default function DoctorEmergencyView() {
     )
   }
 
-  const highImportanceRecords = patientData.health_records?.filter((r: any) => r.importance_level >= 3) || []
+  const highImportanceRecords = patientData.health_records?.filter((r: any) => r.priority_level >= 3) || []
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emergency/5 via-background to-emergency/10">
@@ -142,7 +142,9 @@ export default function DoctorEmergencyView() {
                             <h3 className="font-semibold">{record.title}</h3>
                             <p className="text-sm text-muted-foreground">{record.report_type}</p>
                           </div>
-                          <Badge variant="destructive">Level {record.importance_level}</Badge>
+                          <Badge variant={record.priority_level === 5 ? "destructive" : record.priority_level === 4 ? "warning" : "default"}>
+                            Priority Level {record.priority_level}
+                          </Badge>
                         </div>
                         {record.file_url && (
                           <Button asChild variant="link" className="p-0 h-auto mt-2">
