@@ -1,6 +1,9 @@
 import { createClient } from "@/lib/supabase/server"
 import { type NextRequest, NextResponse } from "next/server"
 
+export const dynamic = 'force-dynamic'
+export const runtime = 'edge'
+
 export async function POST(request: NextRequest) {
   try {
     const { userId, vhealthId, systemEmail, password, userType } = await request.json()
